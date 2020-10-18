@@ -53,23 +53,28 @@ class ShareViewController: SLComposeServiceViewController {
     }
 
   func handlePost(_ item: NSExtensionItem, extraData: [String:Any]? = nil) {
-    guard let provider = item.attachments?.first else {
+    guard let providers = item.attachments else {
       cancelRequest()
       return
     }
-
+    
+    
     if let data = extraData {
       storeExtraData(data)
     } else {
       removeExtraData()
     }
+    
+    let textProvider = providers.filter{ $0.isText }.first
+    let urlProvider = providers.filter{ $0.isURL }.first
+    let defaultProvider = providers.first
 
-    if provider.isText {
-      storeText(withProvider: provider)
-    } else if provider.isURL {
-      storeUrl(withProvider: provider)
+    if urlProvider != nil {
+      storeUrl(withProvider: urlProvider!)
+    } else if textProvider != nil {
+      storeText(withProvider: textProvider!)
     } else {
-      storeFile(withProvider: provider)
+      storeFile(withProvider: defaultProvider!)
     }
   }
 
