@@ -104,16 +104,12 @@ public class ShareMenuReactView: NSObject {
         for provider in attachments {
             if provider.hasItemConformingToTypeIdentifier(kUTTypeURL as String) {
                 urlProvider = provider as? NSItemProvider
-                break
             } else if provider.hasItemConformingToTypeIdentifier(kUTTypeText as String) {
                 textProvider = provider as? NSItemProvider
-                break
             } else if provider.hasItemConformingToTypeIdentifier(kUTTypeImage as String) {
                 imageProvider = provider as? NSItemProvider
-                break
             } else if provider.hasItemConformingToTypeIdentifier(kUTTypeData as String) {
                 dataProvider = provider as? NSItemProvider
-                break
             }
         }
 
@@ -123,19 +119,19 @@ public class ShareMenuReactView: NSObject {
 
                 callback(url.absoluteString, "text/plain", nil)
             }
-        } else if (imageProvider != nil) {
-            imageProvider.loadItem(forTypeIdentifier: kUTTypeImage as String, options: nil) { (item, error) in
-                let url: URL! = item as? URL
-
-                callback(url.absoluteString, self.extractMimeType(from: url), nil)
-            }
         } else if (textProvider != nil) {
             textProvider.loadItem(forTypeIdentifier: kUTTypeText as String, options: nil) { (item, error) in
                 let text:String! = item as? String
 
                 callback(text, "text/plain", nil)
             }
-        }  else if (dataProvider != nil) {
+        } else if (imageProvider != nil) {
+            imageProvider.loadItem(forTypeIdentifier: kUTTypeImage as String, options: nil) { (item, error) in
+                let url: URL! = item as? URL
+
+                callback(url.absoluteString, self.extractMimeType(from: url), nil)
+            }
+        } else if (dataProvider != nil) {
             dataProvider.loadItem(forTypeIdentifier: kUTTypeData as String, options: nil) { (item, error) in
                 let url: URL! = item as? URL
 
